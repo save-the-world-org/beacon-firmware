@@ -43,7 +43,7 @@ A message is one byte of ID, then its data:
 
 Apple's Nearby Interaction Service (ANIS, `48FE3E40-0817-4BB2-8633-3073689C2DBA`, its accessory configuration data in
 `95E8D9D5-D8EF-4721-9A4E-807375F53328`) is the one iOS uses for ranging in the background, with the beacon paired
-(Qorvo's NI Background quick start guide; iOS 16 and later). spike-rayban uses QNIS only.
+(Qorvo's NI Background quick start guide; iOS 16 and later). hero-goggles-ios uses QNIS only.
 
 ## Calibration
 
@@ -61,7 +61,7 @@ distances it gave on 2026-11-08, "a touch off". Two ways to calibrate it, neithe
   `CALKEY ant<x>.ch<y>.ant_delay <value>` (antenna path x, channel y; `LISTCAL` lists every key), and repeat until the
   distance reads true. Then flash QANI without `--erase`, so the calibration stays. Over UCI the same is Qorvo's
   `load_cal` and `set_cal` scripts, with the SDK's DWM3001CDK file `dual-hoe_non_aoa.json`.
-- **On the phone**: measure the error at a few known distances from spike-rayban's log and subtract it in the app.
+- **On the phone**: measure the error at a few known distances from hero-goggles-ios's log and subtract it in the app.
   Nothing changes on the beacon, and each beacon needs its own numbers.
 
 The DW3110 also holds antenna delays measured in Qorvo's production for the kit's antenna, in its one-time

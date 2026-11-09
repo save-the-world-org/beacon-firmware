@@ -27,14 +27,14 @@ What was learned about the DWM3001CDK, Qorvo's firmware and the tools, newest la
 - **Polling it silenced it.** A watcher that read the board with probe-rs every two seconds stopped its advertising,
   and its "busy" answers were misread as error codes. A reset brought advertising back. Rule since: read once, after.
 
-## 2026-11-08: seeking it with spike-rayban
+## 2026-11-08: seeking it with hero-goggles-ios
 
-- spike-rayban's seek ranged it, with the distance in jarededwards's Ray-Ban Display glasses; the lens's top line then
+- hero-goggles-ios's seek ranged it, with the distance in jarededwards's Ray-Ban Display glasses; the lens's top line then
   showed the beacon's Bluetooth name, and shows the app's own title since, "Hero Finder" from
-  2026-11-09 (spike-rayban `docs/findings.md`). A test on a
+  2026-11-09 (hero-goggles-ios `docs/findings.md`). A test on a
   power bank, away from the Mac, was next.
 - The distances seemed "a touch off and stuck at weird increments" to jarededwards. The app's spoken rounding was
-  coarse, and is finer since; the app logs every reading for the rest (spike-rayban, `seek-*.csv`).
+  coarse, and is finer since; the app logs every reading for the rest (hero-goggles-ios, `seek-*.csv`).
 
 ## 2026-11-09: calibration, licences, the toolchain
 

@@ -2,7 +2,7 @@
 
 Firmware and tools for Darkshift's UWB beacons, Qorvo DWM3001CDK boards: a DWM3001C module (Nordic's nRF52833 for
 Bluetooth LE, Qorvo's DW3110 for Ultra Wideband) with an ST LIS2DH12 accelerometer and an on-board J-Link. A phone finds
-a beacon over Bluetooth, then measures the way to it over Ultra Wideband. save-the-world-org/spike-rayban is the iPhone app
+a beacon over Bluetooth, then measures the way to it over Ultra Wideband. save-the-world-org/hero-goggles-ios is the iPhone app
 that seeks one ("Hero Finder"), and infrared-docs-internal's `docs/beacons/` are the pages for people, from plugging
 in a board to the phone and the glasses.
 
@@ -38,7 +38,7 @@ You need a Mac, a DWM3001CDK and a micro-USB cable that carries data.
    SW2 lights D10 and says "button SW2 down"; `watch` streams the accelerometer.
 6. **Qorvo's firmware, for an iPhone:** `scripts/sdk <path to DW3_QM33_SDK_1.1.1.zip>`, then
    `scripts/flash --erase sdk/SDK/Binaries/DWM3001CDK/DWM3001CDK-QANI-FreeRTOS.hex`. It advertises once a second as
-   "DWM3001CDK (<address>)", and `tools/blescan` lists it. Range with Qorvo's iPhone app or spike-rayban; close one before
+   "DWM3001CDK (<address>)", and `tools/blescan` lists it. Range with Qorvo's iPhone app or hero-goggles-ios; close one before
    the other, since it takes one connection at a time.
 
 Two boards and no phone: Qorvo's CLI firmware (`DWM3001CDK-CLI-FreeRTOS.hex`) ranges board to board, `INITF` on one and

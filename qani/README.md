@@ -40,4 +40,4 @@ Leave `--erase` off when the board already runs QANI: the application changes an
 `uwbprobe` or another of Qorvo's firmware needs `--erase` first, which puts it back on Qorvo's default calibration
 (`docs/qani.md`, Calibration).
 
-Then `tools/blescan` should list "Hero Finder (86E7C53A)", and spike-rayban finds it by Qorvo's service as before.
+Then `tools/blescan` should list "Hero Finder (86E7C53A)", and hero-goggles-ios finds it by Qorvo's service as before.
