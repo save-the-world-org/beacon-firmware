@@ -1,0 +1,9 @@
+# Builds: uwbprobe, and Qorvo's firmware built from its source (qani/build).
+/.build/
+# Qorvo's SDK, unpacked by scripts/sdk: licensed to Darkshift, never committed (CLAUDE.md, Licences).
+/sdk/
+*.zip
+# What scripts/backup reads back from a board: that board's own data.
+/backups/
+__pycache__/
+.DS_Store

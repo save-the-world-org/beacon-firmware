@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Reads a DWM3001CDK's whole flash (512 KB) and UICR (4 KB) over SWD into backups/<time>-<DEVICEADDR[0]>/, with what
+# scripts/identify says and each file's SHA-256. Run it before a board's first flash. backups/ is git-ignored: a board's
+# flash is its own data, and on Qorvo's firmware it holds Qorvo's code.
+#
+# Writing a backup back onto a board has not been tried. Never run this while QANI is mid-test: a read stops the firmware
+# for a moment (scripts/identify).
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+probe=(--chip nRF52833_xxAA --protocol swd --non-interactive)
+addr0=$(probe-rs read "${probe[@]}" b32 0x100000A4 1 | sed 's/^[0-9a-fA-F]*: //' | tr 'a-f' 'A-F')
+dir="backups/$(date +%Y%m%d-%H%M%S)-$addr0"
+mkdir -p "$dir"
+
+scripts/identify >"$dir/identity.txt"
+probe-rs read "${probe[@]}" b32 0x00000000 131072 --output "$dir/flash.bin" --format binary
+probe-rs read "${probe[@]}" b32 0x10001000 1024 --output "$dir/uicr.bin" --format binary
+(cd "$dir" && shasum -a 256 flash.bin uicr.bin >sha256.txt)
+
+cat "$dir/identity.txt"
+echo "backed up to $dir"

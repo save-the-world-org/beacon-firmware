@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+# Reads a DWM3001CDK's identity over SWD, through the J-Link on its J9 port: the nRF52833's part, variant, package,
+# flash and RAM, its device ID and Bluetooth address (FICR), and whether its flash and UICR are blank.
+#
+# A read stops the firmware for a moment. Run it once, never in a loop while Qorvo's QANI firmware runs: reads every two
+# seconds silenced its Bluetooth advertising until a reset (docs/findings.md).
+set -euo pipefail
+
+probe=(--chip nRF52833_xxAA --protocol swd --non-interactive)
+# The words at an address, without probe-rs's "address:" prefix.
+words() { probe-rs read "${probe[@]}" b32 "$1" "$2" | sed 's/^[0-9a-fA-F]*: //'; }
+
+info=$(words 0x10000100 5)
+read -r part variant package ram flash <<<"$info"
+deviceid=$(words 0x10000060 2)
+read -r id0 id1 <<<"$deviceid"
+address=$(words 0x100000A0 3)
+read -r addrtype addr0 addr1 <<<"$address"
+nrffw=$(words 0x10001014 2)
+read -r bootloader _ <<<"$nrffw"
+vector=$(words 0x00000000 2)
+read -r stack reset <<<"$vector"
+
+# The variant is four ASCII characters ("AAA0"); RAM and flash are in KB.
+variant_text=""
+for shift in 24 16 8 0; do
+  byte=$(( (0x$variant >> shift) & 0xFF ))
+  variant_text+=$(printf '%b' "\\x$(printf '%02x' "$byte")")
+done
+# DEVICEADDR is 48 bits; a random static address has its top two bits set (DEVICEADDRTYPE bit 0).
+mac=$(( ((0x$addr1 & 0xFFFF) << 32) | 0x$addr0 ))
+if (( (0x$addrtype & 1) == 1 )); then
+  mac=$(( mac | (0xC000 << 32) ))
+  kind="random static"
+else
+  kind="public"
+fi
+mac_text=$(printf '%012X' "$mac" | sed 's/../&:/g; s/:$//')
+
+printf 'chip        nRF%x, variant %s, package 0x%x\n' "$(( 0x$part ))" "$variant_text" "$(( 0x$package ))"
+printf 'memory      %d KB flash, %d KB RAM\n' "$(( 0x$flash ))" "$(( 0x$ram ))"
+printf 'device id   %s%s\n' "$id1" "$id0"
+printf 'bluetooth   %s (%s)\n' "$mac_text" "$kind"
+printf 'QANI name   DWM3001CDK (%s), unless built with qani/patches\n' "$(printf '%08X' "$(( 0x$addr0 ))")"
+if [ "$stack" = ffffffff ]; then
+  echo "flash       blank at 0x0: no firmware"
+else
+  printf 'flash       firmware at 0x0: initial stack 0x%s, reset 0x%s\n' "$stack" "$reset"
+fi
+if [ "$bootloader" = ffffffff ]; then
+  echo "uicr        no bootloader address (NRFFW[0] blank)"
+else
+  printf 'uicr        bootloader at 0x%s\n' "$bootloader"
+fi

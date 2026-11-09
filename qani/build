@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# Builds Qorvo's QANI firmware for the DWM3001CDK from the SDK's source with our patches (qani/patches/), the way Qorvo's
+# README builds it from the command line: CreateTarget.py, then make.
+#
+#   qani/build [Release|Debug]      the .hex lands in .build/qani/source/BuildOutput/QANI/FreeRTOS/DWM3001CDK/<type>/
+#
+# NOT RUN YET (2026-11-09): it needs Arm's GNU toolchain (qani/README.md, The toolchain), CMake 3.23 or later
+# (Brewfile), Python 3.10 or later, and the SDK's source from scripts/sdk. Its first run pip-installs Qorvo's build
+# requirements (poetry 1.7.1, poethepoet, pyyaml) into .build/qani/venv, from PyPI.
+#
+# ARM_TOOLCHAIN names the toolchain's directory (the one holding bin/arm-none-eabi-gcc) when it is not on PATH.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+type=${1:-Release}
+src=sdk/source
+work=.build/qani/source
+venv=.build/qani/venv
+
+[ -d "$src/Projects/FreeRTOS/QANI/DWM3001CDK" ] || {
+  echo "qani/build: no SDK source in $src: run scripts/sdk <zip> first" >&2
+  exit 1
+}
+if [ -n "${ARM_TOOLCHAIN:-}" ]; then
+  export TOOLCHAIN_PREFIX="$ARM_TOOLCHAIN/bin/arm-none-eabi-"
+fi
+gcc="${TOOLCHAIN_PREFIX:-arm-none-eabi-}gcc"
+command -v "$gcc" >/dev/null || {
+  echo "qani/build: $gcc not found: install Arm's GNU toolchain (qani/README.md) or set ARM_TOOLCHAIN" >&2
+  exit 1
+}
+version=$("$gcc" -dumpversion)
+[ "$version" = 10.3.1 ] || echo "qani/build: $gcc is $version; Qorvo builds with 10.3-2021.10 (10.3.1), and its libraries were built with it" >&2
+command -v cmake >/dev/null || { echo "qani/build: cmake not found (brew bundle --file=Brewfile)" >&2; exit 1; }
+
+# A pristine copy of the source each time, then our patches.
+mkdir -p "$work"
+rsync -a --delete "$src/" "$work/"
+for patch in qani/patches/*.patch; do
+  patch -p1 --forward --silent -d "$work" <"$patch"
+done
+
+if [ ! -x "$venv/bin/python" ]; then
+  python3 -m venv "$venv"
+fi
+venv=$(cd "$venv" && pwd)
+(cd "$work" && "$venv/bin/pip" install --quiet -r requirements.txt)
+
+(cd "$work/Projects/FreeRTOS/QANI/DWM3001CDK" && "$venv/bin/python" ./CreateTarget.py -build "$type")
+(cd "$work/BuildOutput/QANI/FreeRTOS/DWM3001CDK/$type" && make -j)
+ls -l "$work/BuildOutput/QANI/FreeRTOS/DWM3001CDK/$type/"*.hex

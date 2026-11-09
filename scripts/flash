@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# Flashes a firmware file onto the DWM3001CDK on J9, checks what was written, and restarts the board.
+#
+#   scripts/flash [--erase] <file.elf | file.hex>
+#
+# --erase erases the whole chip first, UICR included. Use it when the new firmware's flash layout differs from what is
+# on the board: Qorvo's firmware (Nordic's MBR and SoftDevice from 0x0, the application from 0x1C000) after uwbprobe,
+# uwbprobe after Qorvo's, or one of Qorvo's builds over another (CLI over QANI). It also erases the UWB calibration
+# Qorvo's firmware keeps in flash (docs/qani.md, Calibration), so leave it off when only the application changes, such
+# as a new build of the same QANI.
+set -euo pipefail
+
+erase=false
+if [ "${1:-}" = --erase ]; then
+  erase=true
+  shift
+fi
+file=${1:?usage: scripts/flash [--erase] <file.elf | file.hex>}
+[ -f "$file" ] || { echo "flash: no file $file" >&2; exit 2; }
+
+format=()
+case "$file" in
+  *.hex) format=(--binary-format hex) ;;
+  *.elf) ;;
+  *) echo "flash: give an .elf or a .hex" >&2; exit 2 ;;
+esac
+
+probe=(--chip nRF52833_xxAA --protocol swd --non-interactive)
+if $erase; then
+  echo "erasing the whole chip, the UWB calibration in flash with it"
+  probe-rs erase "${probe[@]}"
+fi
+probe-rs download "${probe[@]}" --disable-progressbars ${format[@]+"${format[@]}"} --verify "$file"
+probe-rs reset "${probe[@]}"
+echo "flashed $file and restarted the board"

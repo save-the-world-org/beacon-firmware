@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# The gate: the harness, shellcheck on the scripts, uwbprobe built with clang and GNU ld, the tools compiled, the
+# patches checked against Qorvo's licence, and nothing of Qorvo's SDK tracked. It needs no board and no network.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+node .infrared/bin/bb-harness.mjs validate
+shellcheck scripts/* uwbprobe/build qani/build tools/blescan
+uwbprobe/build
+mkdir -p .build/tools
+swiftc -O -o .build/tools/blescan tools/blescan.swift
+python3 -I -c 'import ast, sys; ast.parse(open(sys.argv[1]).read(), sys.argv[1])' tools/serialtalk.py
+
+# Licences (CLAUDE.md). What git would commit: tracked files and new ones it does not ignore.
+files=$(git ls-files --cached --others --exclude-standard)
+if grep -E '^sdk/|\.(zip|hex|bin|a|pdf)$' <<<"$files"; then
+  echo "verify: the files above look like part of Qorvo's SDK or a build: untrack them (CLAUDE.md, Licences)" >&2
+  exit 1
+fi
+for patch in qani/patches/*.patch; do
+  # A patch touches only Qorvo's application source, which is LicenseRef-QORVO-2, never the UWB stack.
+  if grep -E '^\+\+\+ ' "$patch" | grep -vE '^\+\+\+ b/(Projects|Src)/'; then
+    echo "verify: $patch touches a file outside Projects/ and Src/ (CLAUDE.md, Licences)" >&2
+    exit 1
+  fi
+  # Nothing built from Qorvo's source may carry Qorvo's name (its licence, clause 5).
+  if grep -E '^\+[^+]' "$patch" | grep -i qorvo; then
+    echo "verify: $patch adds Qorvo's name to a build (CLAUDE.md, Licences)" >&2
+    exit 1
+  fi
+done
+# With the SDK unpacked (scripts/sdk), the patches must still apply to its source.
+if [ -d sdk/source/Projects ]; then
+  for patch in qani/patches/*.patch; do
+    patch -p1 --dry-run --forward --silent -d sdk/source <"$patch" >/dev/null
+  done
+fi
+echo "verify: ok"

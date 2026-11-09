@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Lists the beacons this Mac hears over Bluetooth for N seconds (default 15): Qorvo's Nearby Interaction firmware, by the
+# service it advertises or by its name. Compiles tools/blescan.swift into .build/tools/ when that is newer.
+#
+#   tools/blescan [seconds]
+#
+# macOS asks once for Bluetooth access for the app the command runs in (Terminal, iTerm, an editor's terminal).
+set -euo pipefail
+here=$(cd "$(dirname "$0")" && pwd)
+out="$here/../.build/tools"
+mkdir -p "$out"
+if [ ! -x "$out/blescan" ] || [ "$here/blescan.swift" -nt "$out/blescan" ]; then
+  swiftc -O -o "$out/blescan" "$here/blescan.swift"
+fi
+exec "$out/blescan" "$@"

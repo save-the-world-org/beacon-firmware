@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Unpacks a copy of Qorvo's SDK, DW3_QM33_SDK_1.1.1.zip, into the git-ignored sdk/: Qorvo's ready-made firmware
+# (sdk/SDK/Binaries/), its manuals (sdk/SDK/Documentation/), its Python tools (sdk/SDK/Tools/), the driver package
+# (sdk/Drivers/), and the firmware's source (sdk/source/, from the zip inside it). Nothing of it is ever committed
+# (CLAUDE.md, Licences).
+#
+#   scripts/sdk <path to DW3_QM33_SDK_1.1.1.zip>
+#
+# The zip is 624 MB and unpacks to about 1.1 GB, plus the source. Its SHA-256 is checked first, against the copy Darkshift
+# downloaded from Qorvo on 2026-11-07.
+set -euo pipefail
+
+expected=010a833b20fca0fbf3d0b17ddccd7321ce6afa4b2dd5455cb0b8e9f568b27b51
+zip=${1:?usage: scripts/sdk <path to DW3_QM33_SDK_1.1.1.zip>}
+[ -f "$zip" ] || { echo "sdk: no file $zip" >&2; exit 2; }
+zip=$(cd "$(dirname "$zip")" && pwd)/$(basename "$zip")
+cd "$(dirname "$0")/.."
+
+echo "checking $zip"
+actual=$(shasum -a 256 "$zip" | cut -d' ' -f1)
+if [ "$actual" != "$expected" ]; then
+  echo "sdk: $zip is not the DW3_QM33_SDK_1.1.1.zip Darkshift has (its SHA-256 is $actual)" >&2
+  exit 1
+fi
+
+mkdir -p sdk/source
+unzip -q -o "$zip" -d sdk
+unzip -q -o sdk/SDK/Firmware/DW3_QM33_SDK_1.1.1.zip -d sdk/source
+echo "unpacked into sdk/:"
+ls sdk/SDK/Binaries/DWM3001CDK/
+echo "source: sdk/source/Projects/FreeRTOS/{QANI,CLI,UCI,HelloWorld}"
