@@ -83,7 +83,7 @@ In the SDK's source (`sdk/source/` after `scripts/sdk`), all `LicenseRef-QORVO-2
 
 | To change | Where |
 |---|---|
-| The advertised name | `Projects/FreeRTOS/QANI/DWM3001CDK/ProjectDefinition/ProjectName.c` (`BoardName`) and `Projects/FreeRTOS/QANI/Common/src/main.c` (the format): `qani/patches/0001-hero-finder-name.patch` |
+| The advertised name | `Projects/FreeRTOS/QANI/DWM3001CDK/ProjectDefinition/ProjectName.c` (`BoardName`, which `qani/patches/0001-hero-finder-name.patch` sets to "Hero Finder"); `Projects/FreeRTOS/QANI/Common/src/main.c` adds the ID, `" (%08X)"` of DEVICEADDR[0]: keep it, it is the beacon's ID |
 | Advertising, the services | `Src/Comm/Src/BLE/nrfx/ble.c`, `Src/Comm/Src/BLE/nrfx/qnis/` |
 | The ranging session | `Projects/FreeRTOS/QANI/Common/src/fira/` (`fira_niq.c`) |
 | LEDs and the button | `Src/Boards/Src/DWM3001CDK/Common/custom_board.h` names them; QANI drives none |

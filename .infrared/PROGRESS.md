@@ -40,3 +40,12 @@ preference; `tools/blescan` looks for it.
 
 **Next.** As before: a toolchain go-ahead for `qani/build`. A beacon needs a stable identity the phone can read (its
 advertised name carries the low 32 bits of its address today) once people and beacons are registered.
+
+## 2026-11-09, later: the beacon keeps its ID in its name
+
+**Done.** The name patch changes only `BoardName`, so a board advertises "Hero Finder (86E7C53A)", not a bare
+"Hero Finder". A review of save-the-world-org's influence-api found that it names a beacon by its `hardwareId`, matched
+exactly, and the eight hex digits (DEVICEADDR[0]) are the only ID a phone can read without connecting: QANI takes one
+connection at a time and iOS hides the Bluetooth address. A bare name would have made every beacon the same.
+
+**Next.** As before, a toolchain go-ahead for `qani/build`.

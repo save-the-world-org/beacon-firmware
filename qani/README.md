@@ -4,7 +4,7 @@ Qorvo's Nearby Interaction firmware, built from the SDK's source with the patche
 
 | Patch | What it does |
 |---|---|
-| `0001-hero-finder-name.patch` | The beacon advertises as "Hero Finder", not "DWM3001CDK (86E7C53A)", and no name in the build says "Qorvo" |
+| `0001-hero-finder-name.patch` | The beacon advertises as "Hero Finder (86E7C53A)", not "DWM3001CDK (86E7C53A)": the same eight-digit ID, which the phone and Influence's API name it by, and no name in the build says "Qorvo" |
 
 **Not built yet (2026-11-09).** `qani/build` follows Qorvo's README, "Building from command line", but has not run: the
 toolchain below is not installed on any Mac yet. The patch applies to the SDK 1.1.1 source (`patch --dry-run`, and
@@ -40,4 +40,4 @@ Leave `--erase` off when the board already runs QANI: the application changes an
 `uwbprobe` or another of Qorvo's firmware needs `--erase` first, which puts it back on Qorvo's default calibration
 (`docs/qani.md`, Calibration).
 
-Then `tools/blescan` should list "Hero Finder", and spike-rayban finds it by Qorvo's service as before.
+Then `tools/blescan` should list "Hero Finder (86E7C53A)", and spike-rayban finds it by Qorvo's service as before.

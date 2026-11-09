@@ -2,7 +2,7 @@ import CoreBluetooth
 import Foundation
 
 // Lists the beacons this Mac hears for N seconds (default 15): Qorvo's Nearby Interaction firmware (QANI), by the
-// service it advertises (QNIS) or by its name, "DWM3001CDK (<address>)" from Qorvo's build or "Hero Finder" from ours.
+// service it advertises (QNIS) or by its name, "DWM3001CDK (<ID>)" from Qorvo's build or "Hero Finder (<ID>)" from ours.
 // The id is the one CoreBluetooth gives that board on this Mac; a phone gives it another. tools/blescan runs it.
 final class Scanner: NSObject, CBCentralManagerDelegate {
     private var central: CBCentralManager!

@@ -6,10 +6,10 @@ to it. It exists so that anyone with a board and a Mac can program one, and so t
 Display glasses seek (spike-rayban's "Hero Finder") runs firmware we can change.
 
 **What we are doing next.** The first build of QANI from Qorvo's source with our patches (`qani/build`), which waits on
-a go-ahead for Arm's toolchain, flashed onto a board without erasing it, so that it advertises as "Hero Finder".
+a go-ahead for Arm's toolchain, flashed onto a board without erasing it, so that it advertises as "Hero Finder (<its ID>)".
 Then the board's UWB calibration, which a chip erase reset to Qorvo's defaults (`docs/qani.md`, Calibration).
 
-**How we know it worked.** `tools/blescan` lists "Hero Finder", spike-rayban ranges it as before, and the distance it
+**How we know it worked.** `tools/blescan` lists "Hero Finder (86E7C53A)", spike-rayban ranges it as before, and the distance it
 reads at a measured two metres is within ten centimetres, written down in `PROGRESS.md`.
 
 ## The loop

@@ -1,24 +1,14 @@
-Hero Finder: the beacon advertises as "Hero Finder", and nothing built carries Qorvo's name.
+Hero Finder: the beacon advertises as "Hero Finder (<its ID>)", and nothing built carries Qorvo's name.
 
-Qorvo's QANI advertises "<BoardName> (<DEVICEADDR[0] in hex>)", such as "DWM3001CDK (86E7C53A)". With this patch every
-board built from it advertises "Hero Finder", and a phone tells boards apart by their Bluetooth identity. The
-application's name, which the firmware logs, loses "Qorvo" too: Qorvo's licence (LicenseRef-QORVO-2, clause 5) lets
-nothing built from its source carry Qorvo's name. Both files are LicenseRef-QORVO-2, and their notices are untouched.
+Qorvo's QANI advertises "<BoardName> (<DEVICEADDR[0] in hex>)", such as "DWM3001CDK (86E7C53A)". With this patch the
+board name is "Hero Finder", so a board advertises "Hero Finder (86E7C53A)". The eight hex digits stay: they are the
+beacon's ID, the only one a phone can read without connecting (QANI takes one connection at a time, and iOS hides the
+Bluetooth address), so the phone, Influence's API and a printed label all name a beacon by them. The application's
+name, which the firmware logs, loses "Qorvo" too: Qorvo's licence (LicenseRef-QORVO-2, clause 5) lets nothing built
+from its source carry Qorvo's name. The file is LicenseRef-QORVO-2, and its notice is untouched.
 
 Apply from the SDK source's root: patch -p1 < 0001-hero-finder-name.patch (qani/build does).
 
---- a/Projects/FreeRTOS/QANI/Common/src/main.c
-+++ b/Projects/FreeRTOS/QANI/Common/src/main.c
-@@ -94,7 +94,8 @@
-
-     /* Start BLE */
-     char advertising_name[32];
--    snprintf(advertising_name, sizeof(advertising_name), "%s (%08X)", (char *)BoardName, (unsigned int)NRF_FICR->DEVICEADDR[0]);
-+    /* Hero Finder: the board name alone, so every beacon built here advertises as "Hero Finder". */
-+    snprintf(advertising_name, sizeof(advertising_name), "%s", (char *)BoardName);
-     ble_init(advertising_name);
-
-     QLOGI("Application: %s", ApplicationName);
 --- a/Projects/FreeRTOS/QANI/DWM3001CDK/ProjectDefinition/ProjectName.c
 +++ b/Projects/FreeRTOS/QANI/DWM3001CDK/ProjectDefinition/ProjectName.c
 @@ -10,7 +10,7 @@
