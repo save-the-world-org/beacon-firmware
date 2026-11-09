@@ -31,3 +31,12 @@ scripts on a board.
 **Next.** The owner's go-ahead on a toolchain (`qani/README.md`), then `qani/build` and a flash without `--erase`; on
 the next board plugged in, run `scripts/identify`, `scripts/backup` and `make flash-uwbprobe`, and say here that they
 worked.
+
+## 2026-11-09: moved to save-the-world-org; the patch renamed
+
+**Done.** The repo moved to the GitHub org save-the-world-org at the owner's word, its first push the owner's. The name
+patch is `qani/patches/0001-hero-finder-name.patch` and the beacon's name "Hero Finder", generic at the owner's
+preference; `tools/blescan` looks for it.
+
+**Next.** As before: a toolchain go-ahead for `qani/build`. A beacon needs a stable identity the phone can read (its
+advertised name carries the low 32 bits of its address today) once people and beacons are registered.

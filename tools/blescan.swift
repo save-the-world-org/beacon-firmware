@@ -2,7 +2,7 @@ import CoreBluetooth
 import Foundation
 
 // Lists the beacons this Mac hears for N seconds (default 15): Qorvo's Nearby Interaction firmware (QANI), by the
-// service it advertises (QNIS) or by its name, "DWM3001CDK (<address>)" from Qorvo's build or "Kelsey Finder" from ours.
+// service it advertises (QNIS) or by its name, "DWM3001CDK (<address>)" from Qorvo's build or "Hero Finder" from ours.
 // The id is the one CoreBluetooth gives that board on this Mac; a phone gives it another. tools/blescan runs it.
 final class Scanner: NSObject, CBCentralManagerDelegate {
     private var central: CBCentralManager!
@@ -32,7 +32,7 @@ final class Scanner: NSObject, CBCentralManagerDelegate {
         let name = advertisementData[CBAdvertisementDataLocalNameKey] as? String ?? peripheral.name ?? ""
         let services = advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID] ?? []
         let advertisesQNIS = services.contains(qnis)
-        guard advertisesQNIS || name.contains("DWM3001") || name.contains("Kelsey Finder") else { return }
+        guard advertisesQNIS || name.contains("DWM3001") || name.contains("Hero Finder") else { return }
         beacons.insert(peripheral.identifier)
         let time = Date().formatted(date: .omitted, time: .standard)
         print(time, "name:", name.isEmpty ? "(not yet)" : name, "rssi:", rssi, "dBm",

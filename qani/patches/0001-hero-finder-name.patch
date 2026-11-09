@@ -1,11 +1,11 @@
-Kelsey Finder: the beacon advertises as "Kelsey Finder", and nothing built carries Qorvo's name.
+Hero Finder: the beacon advertises as "Hero Finder", and nothing built carries Qorvo's name.
 
 Qorvo's QANI advertises "<BoardName> (<DEVICEADDR[0] in hex>)", such as "DWM3001CDK (86E7C53A)". With this patch every
-board built from it advertises "Kelsey Finder", and a phone tells boards apart by their Bluetooth identity. The
+board built from it advertises "Hero Finder", and a phone tells boards apart by their Bluetooth identity. The
 application's name, which the firmware logs, loses "Qorvo" too: Qorvo's licence (LicenseRef-QORVO-2, clause 5) lets
 nothing built from its source carry Qorvo's name. Both files are LicenseRef-QORVO-2, and their notices are untouched.
 
-Apply from the SDK source's root: patch -p1 < 0001-kelsey-finder-name.patch (qani/build does).
+Apply from the SDK source's root: patch -p1 < 0001-hero-finder-name.patch (qani/build does).
 
 --- a/Projects/FreeRTOS/QANI/Common/src/main.c
 +++ b/Projects/FreeRTOS/QANI/Common/src/main.c
@@ -14,7 +14,7 @@ Apply from the SDK source's root: patch -p1 < 0001-kelsey-finder-name.patch (qan
      /* Start BLE */
      char advertising_name[32];
 -    snprintf(advertising_name, sizeof(advertising_name), "%s (%08X)", (char *)BoardName, (unsigned int)NRF_FICR->DEVICEADDR[0]);
-+    /* Kelsey Finder: the board name alone, so every beacon built here advertises as "Kelsey Finder". */
++    /* Hero Finder: the board name alone, so every beacon built here advertises as "Hero Finder". */
 +    snprintf(advertising_name, sizeof(advertising_name), "%s", (char *)BoardName);
      ble_init(advertising_name);
 
@@ -27,8 +27,8 @@ Apply from the SDK source's root: patch -p1 < 0001-kelsey-finder-name.patch (qan
 
 -const char ProjectName[] = "DWM3001CDK - QANI - FreeRTOS";
 -const char BoardName[] = "DWM3001CDK";
-+const char ProjectName[] = "Kelsey Finder - DWM3001CDK - FreeRTOS";
-+const char BoardName[] = "Kelsey Finder";
++const char ProjectName[] = "Hero Finder - DWM3001CDK - FreeRTOS";
++const char BoardName[] = "Hero Finder";
  const char OsName[] = "FreeRTOS";
 -const char ApplicationName[] = "Qorvo Nearby Interaction";
-+const char ApplicationName[] = "Kelsey Finder";
++const char ApplicationName[] = "Hero Finder";

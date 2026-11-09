@@ -30,7 +30,8 @@ What was learned about the DWM3001CDK, Qorvo's firmware and the tools, newest la
 ## 2026-11-08: seeking it with spike-rayban
 
 - spike-rayban's seek ranged it, with the distance in jarededwards's Ray-Ban Display glasses; the lens's top line then
-  showed the beacon's Bluetooth name, and says "Kelsey Finder" since (spike-rayban `docs/findings.md`). A test on a
+  showed the beacon's Bluetooth name, and shows the app's own title since, "Hero Finder" from
+  2026-11-09 (spike-rayban `docs/findings.md`). A test on a
   power bank, away from the Mac, was next.
 - The distances seemed "a touch off and stuck at weird increments" to jarededwards. The app's spoken rounding was
   coarse, and is finer since; the app logs every reading for the rest (spike-rayban, `seek-*.csv`).

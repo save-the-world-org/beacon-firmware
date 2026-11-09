@@ -3,13 +3,13 @@
 **What this repo is, in two sentences.** The firmware and tools for Darkshift's UWB beacons, Qorvo DWM3001CDK boards:
 our own test firmware, our patches to Qorvo's Nearby Interaction firmware, and the scripts that flash a board and talk
 to it. It exists so that anyone with a board and a Mac can program one, and so that the beacon a phone and Ray-Ban
-Display glasses seek (spike-rayban's "Kelsey Finder") runs firmware we can change.
+Display glasses seek (spike-rayban's "Hero Finder") runs firmware we can change.
 
 **What we are doing next.** The first build of QANI from Qorvo's source with our patches (`qani/build`), which waits on
-a go-ahead for Arm's toolchain, flashed onto a board without erasing it, so that it advertises as "Kelsey Finder".
+a go-ahead for Arm's toolchain, flashed onto a board without erasing it, so that it advertises as "Hero Finder".
 Then the board's UWB calibration, which a chip erase reset to Qorvo's defaults (`docs/qani.md`, Calibration).
 
-**How we know it worked.** `tools/blescan` lists "Kelsey Finder", spike-rayban ranges it as before, and the distance it
+**How we know it worked.** `tools/blescan` lists "Hero Finder", spike-rayban ranges it as before, and the distance it
 reads at a measured two metres is within ten centimetres, written down in `PROGRESS.md`.
 
 ## The loop
