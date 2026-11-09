@@ -2,7 +2,7 @@
 
 Firmware and tools for Darkshift's UWB beacons, Qorvo DWM3001CDK boards: our own test firmware (`uwbprobe/`), our
 patches to Qorvo's Nearby Interaction firmware (`qani/`), and the scripts and tools that flash a board and talk to it.
-The iPhone app that seeks a beacon is darkshiftio/spike-rayban; the pages for people are infrared-docs-internal's
+The iPhone app that seeks a beacon is save-the-world-org/spike-rayban; the pages for people are infrared-docs-internal's
 `docs/beacons/`. darkshiftio/workspace's `CLAUDE.md` applies here too.
 
 ## Licences

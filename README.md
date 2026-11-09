@@ -2,7 +2,7 @@
 
 Firmware and tools for Darkshift's UWB beacons, Qorvo DWM3001CDK boards: a DWM3001C module (Nordic's nRF52833 for
 Bluetooth LE, Qorvo's DW3110 for Ultra Wideband) with an ST LIS2DH12 accelerometer and an on-board J-Link. A phone finds
-a beacon over Bluetooth, then measures the way to it over Ultra Wideband. darkshiftio/spike-rayban is the iPhone app
+a beacon over Bluetooth, then measures the way to it over Ultra Wideband. save-the-world-org/spike-rayban is the iPhone app
 that seeks one ("Kelsey Finder"), and infrared-docs-internal's `docs/beacons/` are the pages for people, from plugging
 in a board to the phone and the glasses.
 
