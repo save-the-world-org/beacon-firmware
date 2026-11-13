@@ -6,7 +6,7 @@ verify:
 	scripts/verify
 
 harness:
-	node .infrared/bin/bb-harness.mjs validate
+	node .infrared/bin/infrared-harness.mjs validate
 
 uwbprobe:
 	uwbprobe/build

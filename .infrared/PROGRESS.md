@@ -49,3 +49,12 @@ exactly, and the eight hex digits (DEVICEADDR[0]) are the only ID a phone can re
 connection at a time and iOS hides the Bluetooth address. A bare name would have made every beacon the same.
 
 **Next.** As before, a toolchain go-ahead for `qani/build`.
+
+## 2026-11-13: the agent harness, at template 0.4.0
+
+**Done.** Synced to harness-template 0.4.0 (`d9f3423`), which gives the harness Infrared's names: `sync` moved the CLI
+to `.infrared/bin/infrared-harness.mjs`, removed `bb-harness.mjs` and updated the session-start hook and the scripts.
+`make harness`, `scripts/verify`, `AGENTS.md` and the manifest's `$comment` name the new CLI. `make verify` passed.
+The firmware and the tools are unchanged.
+
+**Next.** As before, a toolchain go-ahead for `qani/build`.
